@@ -15,7 +15,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  'datasets >= 2.13.1',
 ]
 
 [tool.pytest.ini_options]
