@@ -45,6 +45,7 @@ def to_colmnuar(transformed_data):
 def import_dataset(chroma_client, collection_name, dataset, mapping_function, dataset_type: str):
 
     if dataset_type == "HuggingFaceDataset":
+
         transformed_data = to_colmnuar(transform_data(dataset, mapping_function))
 
         collection = chroma_client.create_collection(collection_name)
