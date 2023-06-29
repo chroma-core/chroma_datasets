@@ -1,0 +1,33 @@
+[project]
+name = "chroma_datasets"
+version = "0.1.1"
+
+authors = [
+  { name="Jeff Huber", email="jeff@trychroma.com" },
+  { name="Anton Troynikov", email="anton@trychroma.com" }
+]
+description = "Chroma Datasets."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  'datasets >= 2.13.1',
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[project.urls]
+"Homepage" = "https://github.com/chroma-core/chroma-datasets"
+"Bug Tracker" = "https://github.com/chroma-core/chromachroma-datasets/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["chroma_datasets"]
