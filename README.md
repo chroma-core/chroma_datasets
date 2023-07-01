@@ -113,3 +113,9 @@ class PaulGrahamEssay(Dataset):
 
 Add it to the manifest at `chroma_datasets/__init__.py` to make it easy for people to retrieve (optional)
 
+### Todo
+
+- [ ] Add test suite to test some of the critical paths
+- [ ] Add automated pypi release
+- [ ] Add loaders for other locations (remote like S3, local like CSV... etc)
+- [ ] Super easy streamlit/gradio wrapper to push up a collection to interact with
