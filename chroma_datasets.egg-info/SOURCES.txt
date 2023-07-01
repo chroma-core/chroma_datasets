@@ -1,8 +1,0 @@
-LICENSE.md
-pyproject.toml
-chroma_datasets/__init__.py
-chroma_datasets.egg-info/PKG-INFO
-chroma_datasets.egg-info/SOURCES.txt
-chroma_datasets.egg-info/dependency_links.txt
-chroma_datasets.egg-info/requires.txt
-chroma_datasets.egg-info/top_level.txt

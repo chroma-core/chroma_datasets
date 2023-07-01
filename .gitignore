@@ -1,3 +1,9 @@
 dist
 chroma_datasets.egg-info
 **/chroma_datasets.egg-info
+**/__pycache__
+**/.DS_Store
+**/.chroma
+
+chroma_datasets.egg-info
+.chroma

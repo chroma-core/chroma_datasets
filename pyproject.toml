@@ -6,7 +6,7 @@ authors = [
   { name="Jeff Huber", email="jeff@trychroma.com" },
   { name="Anton Troynikov", email="anton@trychroma.com" }
 ]
-description = "Chroma Datasets."
+description = "Chroma Datasets - easy to use datasets for vector retrieval"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -15,6 +15,8 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
+  "langchain",
+  "datasets"
 ]
 
 [tool.pytest.ini_options]
