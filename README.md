@@ -47,18 +47,18 @@ See the examples/upload.ipynb for an example of how to create a dataset on Huggi
 (more examples of this in `examples/upload.ipynb` and `examples/upload_embeddings.ipynb`)
 
 Install dependencies
-```
+```sh
 pip install datasets huggingface_hub chromadb
 ```
 
 Login into Hugging Face
-```
+```sh
 huggingface-cli login
 ```
 
 Upload an existing collection to Hugging Face
 ** Hugging Face requires the data to have a "split name" - I suggest using a default of "data" **
-```
+```python
 import chromadb
 from chroma_datasets.utils import export_collection_to_hf_dataset
 client = chromadb.PersistantClient(path="./chroma_data")
