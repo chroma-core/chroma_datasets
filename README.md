@@ -21,6 +21,7 @@ The following will:
 ```python
 import chromadb
 from chroma_datasets import StateOfTheUnion
+from chroma_datasets.utils import import_into_chroma
 
 chroma_client = chromadb.Client()
 collection = import_into_chroma(chroma_client=chroma_client, dataset=StateOfTheUnion())
