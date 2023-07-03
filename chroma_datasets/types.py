@@ -36,8 +36,9 @@ class Dataset(ABC):
     embedding_function: str
     embedding_function_instructions: str
 
+    @classmethod
     @abstractmethod
-    def raw_text() -> str:
+    def raw_text(cls) -> str:
         """
             Returns the dataset as one long string.
             Useful if you want to chunk it yourself.
@@ -45,15 +46,17 @@ class Dataset(ABC):
         """
         pass
 
+    @classmethod
     @abstractmethod
-    def chunked() -> List[Datapoint]:
+    def chunked(cls) -> List[Datapoint]:
         """
             Returns the dataset with a default chunking scheme
         """
         pass
 
+    @classmethod
     @abstractmethod
-    def to_chroma() -> AddEmbedding:
+    def to_chroma(cls) -> AddEmbedding:
         """
             Returns the dataset in a format that can be used by Chroma
         """
