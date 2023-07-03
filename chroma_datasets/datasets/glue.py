@@ -17,19 +17,28 @@ class Glue(Dataset):
     """
     hf_data = None
 
-    def __init__(self):
-        self.hf_data = load_dataset("glue", "ax", split="test")
+    @classmethod
+    def load_data(cls):
+        cls.hf_data = load_dataset("glue", "ax", split="test")
 
-    def raw_text(self) -> str:
-        return "\n".join(self.hf_data["premise"])
+    @classmethod
+    def raw_text(cls) -> str:
+        if cls.hf_data is None:
+            cls.load_data()
+        return "\n".join(cls.hf_data["premise"])
     
-    def chunked(self) -> List[Datapoint]:
+    @classmethod
+    def chunked(cls) -> List[Datapoint]:
+        if cls.hf_data is None:
+            cls.load_data()
+
         mapping = {
             "id": lambda row: str(row["idx"]),
             "metadata": lambda row: {"premise": row["premise"], "hypothesis": row["hypothesis"], "label": row["label"]},
             "document": "premise"
         }
-        return transform_data(self.hf_data, mapping)
+        return transform_data(cls.hf_data, mapping)
     
-    def to_chroma(self) -> AddEmbedding:
-        return to_chroma_schema(self.chunked())
+    @classmethod
+    def to_chroma(cls) -> AddEmbedding:
+        return to_chroma_schema(cls.chunked())

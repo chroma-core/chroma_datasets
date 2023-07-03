@@ -24,17 +24,25 @@ class PaulGrahamEssay(Dataset):
         )
     """
 
-    def __init__(self):
-        self.hf_data = load_huggingface_dataset(
+    @classmethod
+    def load_data(cls):
+        cls.hf_data = load_huggingface_dataset(
             "chromadb/paul_graham_essay",
             split_name="data"
         )
 
-    def raw_text(self) -> str:
-        return "\n".join(self.hf_data["document"])
+    @classmethod
+    def raw_text(cls) -> str:
+        if cls.hf_data is None:
+            cls.load_data()
+        return "\n".join(cls.hf_data["document"])
     
-    def chunked(self) -> List[Datapoint]:
-        return self.hf_data
+    @classmethod
+    def chunked(cls) -> List[Datapoint]:
+        if cls.hf_data is None:
+            cls.load_data()
+        return cls.hf_data
     
-    def to_chroma(self) -> AddEmbedding:
-        return to_chroma_schema(self.chunked())
+    @classmethod
+    def to_chroma(cls) -> AddEmbedding:
+        return to_chroma_schema(cls.chunked())

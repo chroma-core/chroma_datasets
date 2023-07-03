@@ -14,18 +14,26 @@ class StateOfTheUnion(Dataset):
     hf_data = None
     embedding_function = None
 
-    def __init__(self):
-        self.hf_data = load_huggingface_dataset(
+    @classmethod
+    def load_data(cls):
+        cls.hf_data = load_huggingface_dataset(
             "chromadb/state_of_the_union",
             split_name="data"
         )
 
-    def raw_text(self) -> str:
-        return "\n".join(self.hf_data["text"])
+    @classmethod
+    def raw_text(cls) -> str:
+        if cls.hf_data is None:
+            cls.load_data()
+        return "\n".join(cls.hf_data["text"])
     
-    def chunked(self) -> List[Datapoint]:
+    @classmethod
+    def chunked(cls) -> List[Datapoint]:
+        if cls.hf_data is None:
+            cls.load_data()
+
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0, separator="\n")
-        split = text_splitter.split_text(self.raw_text())
+        split = text_splitter.split_text(cls.raw_text())
 
         # convert to array of Datapoint types
         split = [
@@ -38,5 +46,6 @@ class StateOfTheUnion(Dataset):
 
         return split
     
-    def to_chroma(self) -> AddEmbedding:
-        return to_chroma_schema(self.chunked())
+    @classmethod
+    def to_chroma(cls) -> AddEmbedding:
+        return to_chroma_schema(cls.chunked())

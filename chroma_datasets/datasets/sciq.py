@@ -4,7 +4,6 @@ from langchain.text_splitter import CharacterTextSplitter
 from typing import Optional, Union, Sequence, Dict, Mapping, List
 import uuid
 
-
 class SciQ(Dataset):
     """
     https://huggingface.co/datasets/sciq
@@ -20,24 +19,30 @@ class SciQ(Dataset):
     hf_data = None
     embedding_function = None
 
-    def __init__(self):
-        self.hf_data = load_huggingface_dataset(
+    @classmethod
+    def load_data(cls):
+        cls.hf_data = load_huggingface_dataset(
             "sciq",
             split_name="test"
         )
 
-    def raw_text(self) -> str:
+    @classmethod
+    def raw_text(cls) -> str:
         """
             Doesn't make sense for this dataset
         """
         raise NotImplementedError
     
-    def chunked(self) -> List[Datapoint]:
+    @classmethod
+    def chunked(cls) -> List[Datapoint]:
         """
             The dataset is already chunked
         """
+        if cls.hf_data is None:
+            cls.load_data()
+
         dataset_rows = []
-        for row in self.hf_data:
+        for row in cls.hf_data:
 
             # add questions
             dataset_rows.append({
@@ -59,5 +64,6 @@ class SciQ(Dataset):
 
         return dataset_rows
     
-    def to_chroma(self) -> AddEmbedding:
-        return to_chroma_schema(self.chunked())
+    @classmethod
+    def to_chroma(cls) -> AddEmbedding:
+        return to_chroma_schema(cls.chunked())

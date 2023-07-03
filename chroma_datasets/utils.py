@@ -4,6 +4,7 @@ from typing import Optional, Union, Sequence, Dict, Mapping, List
 from chroma_datasets.types import AddEmbedding, Datapoint
 
 
+
 def load_huggingface_dataset(dataset_name, split_name=None):
     """
     Loads a dataset from Hugging Face datasets library.
@@ -99,6 +100,14 @@ def import_into_chroma(chroma_client, dataset, collection_name=None, embedding_f
         dataset (AddEmbedding): The dataset to load.
         embedding_function (Optional[Callable[[str], np.ndarray]]): A function that takes a string and returns an embedding.
     """
+    # if chromadb is not install, raise an error
+    try:
+        import chromadb
+        from chromadb.utils import embedding_functions
+    except ImportError:
+        raise ImportError("Please install chromadb to use this function. `pip install chromadb`")
+    
+
     ef = None
 
     if dataset.embedding_function is not None:
@@ -121,7 +130,10 @@ def import_into_chroma(chroma_client, dataset, collection_name=None, embedding_f
 
     # if collection_name is None, get the name from the dataset type 
     if collection_name is None:
-        collection_name = dataset.__class__.__name__
+        collection_name = dataset.__name__
+
+    if ef is None:
+        ef = embedding_functions.DefaultEmbeddingFunction()
 
     collection = chroma_client.create_collection(
         collection_name,
@@ -137,7 +149,7 @@ def import_into_chroma(chroma_client, dataset, collection_name=None, embedding_f
         embeddings=mapped_data["embeddings"],
     )
 
-    print(f"Loaded {len(mapped_data['ids'])} documents into {collection_name}")
+    print(f"Loaded {len(mapped_data['ids'])} documents into the collection named: {collection_name}")
 
     return collection
 
