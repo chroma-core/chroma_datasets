@@ -2,6 +2,10 @@
 
 Making it easy to load data into Chroma since 2023
 
+```
+pip install chroma_datasets
+```
+
 ### Current Datasets
 - State of the Union `from chroma_datasets import StateOfTheUnion`
 - Paul Graham Essay `from chroma_datasets import PaulGrahamEssay`
