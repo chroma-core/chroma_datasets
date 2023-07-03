@@ -1,8 +1,7 @@
 
-from datasets import load_dataset, DatasetInfo, Dataset
+from datasets import load_dataset, DatasetInfo, Dataset, load_from_disk
 from typing import Optional, Union, Sequence, Dict, Mapping, List
 from chroma_datasets.types import AddEmbedding, Datapoint
-
 
 
 def load_huggingface_dataset(dataset_name, split_name=None):
@@ -106,7 +105,6 @@ def import_into_chroma(chroma_client, dataset, collection_name=None, embedding_f
         from chromadb.utils import embedding_functions
     except ImportError:
         raise ImportError("Please install chromadb to use this function. `pip install chromadb`")
-    
 
     ef = None
 
@@ -152,6 +150,55 @@ def import_into_chroma(chroma_client, dataset, collection_name=None, embedding_f
     print(f"Loaded {len(mapped_data['ids'])} documents into the collection named: {collection_name}")
 
     return collection
+
+
+def import_chroma_exported_hf_dataset_from_disk(chroma_client, path, collection_name, embedding_function=None):
+    dataset = load_from_disk(path)
+    return import_chroma_exported_hf_dataset(chroma_client, dataset, collection_name, embedding_function=embedding_function)
+
+
+def import_chroma_exported_hf_dataset(chroma_client, dataset, collection_name, embedding_function=None):
+    """
+        Imports a dataset that was exported from Chroma into a Hugging Face dataset.
+        This will only work with data exported from Chroma and is not a generic utility function.
+    """
+    try:
+        import chromadb
+        from chromadb.utils import embedding_functions
+    except ImportError:
+        raise ImportError("Please install chromadb to use this function. `pip install chromadb`")
+
+    if embedding_function is None:
+        print("Caution: No embedding function provided. Using the default embedding function.")
+        embedding_function = embedding_functions.DefaultEmbeddingFunction()
+
+    if collection_name is None:
+        raise ValueError("Please provide a collection name.")
+
+    # dataset = load_from_disk(path)
+    mapped_data = to_chroma_schema(dataset)
+
+    collection = chroma_client.create_collection(
+        collection_name,
+        embedding_function=embedding_function
+        )
+
+    collection.add(
+        ids=mapped_data["ids"],
+        metadatas=mapped_data["metadatas"],
+        documents=mapped_data["documents"],
+        embeddings=mapped_data["embeddings"],
+    )
+
+    print(f"Loaded {len(mapped_data['ids'])} documents into the collection named: {collection_name}")
+
+    return collection
+
+
+def export_collection_to_hf_dataset_to_disk(chroma_client, collection_name, path, license="MIT"):
+    dataset = export_collection_to_hf_dataset(chroma_client, collection_name, license=license)
+    dataset.save_to_disk(path)
+    print(f"Saved dataset to {path}")
 
 
 def export_collection_to_hf_dataset(chroma_client, collection_name, license="MIT"):

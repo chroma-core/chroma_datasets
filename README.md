@@ -118,6 +118,32 @@ class PaulGrahamEssay(Dataset):
 
 Add it to the manifest at `chroma_datasets/__init__.py` to make it easy for people to retrieve (optional)
 
+### Utility API Documentation
+
+Many of these methods are purely conveneient. This makes it easy to save and load Chroma Collections to disk. See `./examples/example_export.ipynb` for example use.
+
+```python
+from chromadb.utils import (
+    export_collection_to_hf_dataset,
+    export_collection_to_hf_dataset_to_disk,
+    import_chroma_exported_hf_dataset_from_disk,
+    import_chroma_exported_hf_dataset
+)
+
+# Exports a Chroma collection to an in-memory HuggingFace Dataset
+def export_collection_to_hf_dataset(chroma_client, collection_name, license="MIT"):
+
+# Exports a Chroma collection to a HF dataset and saves to the path
+def export_collection_to_hf_dataset_to_disk(chroma_client, collection_name, path, license="MIT"):
+
+# Imports a HuggingFace Dataset into a Chroma Collection
+def import_chroma_exported_hf_dataset(chroma_client, dataset, collection_name, embedding_function=None):
+
+# Imports a HuggingFace Dataset from Disk and loads it into a Chroma Collection
+def import_chroma_exported_hf_dataset_from_disk(chroma_client, path, collection_name, embedding_function=None):
+
+```
+
 ### Todo
 
 - [ ] Add test suite to test some of the critical paths
