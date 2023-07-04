@@ -1,4 +1,4 @@
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 from .datasets.state_of_the_union import StateOfTheUnion
 from .datasets.glue import Glue
