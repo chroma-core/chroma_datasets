@@ -1,10 +1,16 @@
-## Chroma Datasets
-
-Making it easy to load data into Chroma since 2023
+### 🔍
+## Chroma Datasets 
 
 ```
 pip install chroma_datasets
 ```
+
+- a public package registry of **sample and useful datasets** to use with embeddings
+- a set of tools to **export and import** Chroma collections
+
+We built to enable f**aster experimentation**: There is no good source of sample datasets and sample datasets are incredibly important to enable fast experiments and learning.
+
+
 
 ### Current Datasets
 | Dataset                | Size              | Contributor            | Python Class                   |
@@ -13,7 +19,8 @@ pip install chroma_datasets
 | Paul Graham Essay      | 1.3mb               | Chroma        | `from chroma_datasets import PaulGrahamEssay` |
 | SciQ                  | 2.8mb               | Hugging Face        | `from chroma_datasets import SciQ` |
 | Huberman Podcasts | 4.3mb | [Dexa AI](https://dexa.ai/) | `from chroma_datasets import HubermanPodcasts` 
-
+| more soon... | | | read below how to contribute
+ 
 `chroma_datasets` is generally backed by hugging face datasets, but it is not a requirement.
 
 ### How to use
@@ -154,6 +161,11 @@ def import_chroma_exported_hf_dataset(chroma_client, dataset, collection_name, e
 def import_chroma_exported_hf_dataset_from_disk(chroma_client, path, collection_name, embedding_function=None):
 
 ```
+
+### License
+Code: Apache 2.0
+
+Each dataset has it's own license. Datasets uploaded by Chroma are released as `MIT`.
 
 ### Todo
 
