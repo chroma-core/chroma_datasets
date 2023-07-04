@@ -7,10 +7,12 @@ pip install chroma_datasets
 ```
 
 ### Current Datasets
-- State of the Union `from chroma_datasets import StateOfTheUnion`
-- Paul Graham Essay `from chroma_datasets import PaulGrahamEssay`
-- Glue `from chroma_datasets import Glue`
-- SciPy `from chroma_datasets import SciPy`
+| Dataset                | Size              | Contributor            | Python Class                   |
+|------------------------|-------------------|------------------------|--------------------------------|
+| State of the Union     | 51kb               | Chroma        | `from chroma_datasets import StateOfTheUnion` |
+| Paul Graham Essay      | 1.3mb               | Chroma        | `from chroma_datasets import PaulGrahamEssay` |
+| SciQ                  | 2.8mb               | Hugging Face        | `from chroma_datasets import SciQ` |
+| Huberman Podcasts | 4.3mb | [Dexa AI](https://dexa.ai/) | `from chroma_datasets import HubermanPodcasts` 
 
 `chroma_datasets` is generally backed by hugging face datasets, but it is not a requirement.
 
