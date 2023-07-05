@@ -31,6 +31,8 @@ The following will:
 3. Embed it using Chroma's default open-source embedding function
 4. Import it into Chroma
 
+Try it yourself in this [Colab Notebook](https://githubtocolab.com/chroma-core/chroma_datasets/blob/master/examples/super_simple.ipynb).
+
 ```python
 import chromadb
 from chroma_datasets import StateOfTheUnion
