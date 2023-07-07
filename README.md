@@ -25,10 +25,8 @@ We built to enable **faster experimentation**: There is no good source of sample
 ### How to use
 
 The following will:
-1. Download the 2022 State of the Union
-2. Chunk it up for you
-3. Embed it using Chroma's default open-source embedding function
-4. Import it into Chroma
+1. Download the 2022 State of the Union with pre-computed chunks and embeddings
+2. Import it into Chroma
 
 Try it yourself in this [Colab Notebook](https://githubtocolab.com/chroma-core/chroma_datasets/blob/master/examples/super_simple.ipynb).
 
