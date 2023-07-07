@@ -8,7 +8,7 @@ pip install chroma_datasets
 - a public package registry of **sample and useful datasets** to use with embeddings
 - a set of tools to **export and import** Chroma collections
 
-We built to enable f**aster experimentation**: There is no good source of sample datasets and sample datasets are incredibly important to enable fast experiments and learning.
+We built to enable **faster experimentation**: There is no good source of sample datasets and sample datasets are incredibly important to enable fast experiments and learning.
 
 
 
@@ -17,11 +17,10 @@ We built to enable f**aster experimentation**: There is no good source of sample
 |------------------------|-------------------|------------------------|--------------------------------|
 | State of the Union     | 51kb               | Chroma        | `from chroma_datasets import StateOfTheUnion` |
 | Paul Graham Essay      | 1.3mb               | Chroma        | `from chroma_datasets import PaulGrahamEssay` |
-| SciQ                  | 2.8mb               | Hugging Face        | `from chroma_datasets import SciQ` |
 | Huberman Podcasts | 4.3mb | [Dexa AI](https://dexa.ai/) | `from chroma_datasets import HubermanPodcasts` 
 | more soon... | | | read below how to contribute
  
-`chroma_datasets` is generally backed by hugging face datasets, but it is not a requirement.
+`chroma_datasets` is currently backed by Hugging Face datasets
 
 ### How to use
 
@@ -35,12 +34,17 @@ Try it yourself in this [Colab Notebook](https://githubtocolab.com/chroma-core/c
 
 ```python
 import chromadb
+from chromadb.utils import embedding_functions
 from chroma_datasets import StateOfTheUnion
 from chroma_datasets.utils import import_into_chroma
 
 chroma_client = chromadb.Client()
-collection = import_into_chroma(chroma_client=chroma_client, dataset=StateOfTheUnion)
-result = collection.query(query_texts=["The United States of America"])
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+    api_key="API_KEY",
+    model_name="text-embedding-ada-002"
+)
+collection = import_into_chroma(chroma_client=chroma_client, dataset=StateOfTheUnion, embedding_function=openai_ef)
+result = collection.query(query_texts=["The United States of America"], n_results=1)
 print(result)
 ```
 
@@ -48,18 +52,13 @@ print(result)
 
 We welcome new datasets! 
 
-These datasets can be anything generally useful to developer education for processing and using embeddings.
+These datasets can be anything generally useful to developer education for processing and using embeddings. 
 
-Datasets can be:
-- raw text (like `StateOfTheUnion`)
-- pre-chunked data (like `SciPy`)
-- chunked and embedded (like `PaulGrahamEssay`)
-
-See the examples/upload.ipynb for an example of how to create a dataset on Hugging Face (the default path)
+Datasets should be exported from a Chroma collection. See `examples/example_export.ipynb` for an example of how to create a dataset on Hugging Face (the default path)
 
 #### Create a new dataset from a Chroma Collection
 
-(more examples of this in `examples/upload.ipynb` and `examples/upload_embeddings.ipynb`)
+(more examples of this in `examples/example_export.ipynb`)
 
 Install dependencies
 ```sh
@@ -88,55 +87,16 @@ dataset.push_to_hub(
 
 Create a Dataset Class
 - Set the string name of the embedding function you used to embed the data, this will make it possible for users to use the embeddings. Please also customize the helpful error message so if users pass in no embedding function or the wrong one, they get help.
-- `raw_text` is optional
-- `chunked` and `to_chroma` you can copy letter for letter if you uploaded with the method above.
 ```python
 class PaulGrahamEssay(Dataset):
     """
-    http://www.paulgraham.com/worked.html
-
-    Columns:
-        - id: unique identifier for each chunk
-        - document: the text of the chunk
-        - embedding: the embedding of the chunk (OpenAI-ada-002)
-        - metadata: metadata about the chunk
+        http://www.paulgraham.com/worked.html
     """
     hf_data = None
-    embedding_function = "OpenAIEmbeddingFunction" # name of embedding function inside Chroma
-    embedding_function_instructions = """
-        from chromadb.utils import embedding_functions
-        openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-            api_key="YOUR_API_KEY",
-            model_name="text-embedding-ada-002"
-        )
-    """
-
-    @classmethod
-    def load_data(cls):
-        cls.hf_data = load_huggingface_dataset(
-            "chromadb/paul_graham_essay",
-            split_name="data"
-        )
-
-    @classmethod
-    def raw_text(cls) -> str:
-        if cls.hf_data is None:
-            cls.load_data()
-        return "\n".join(cls.hf_data["document"])
-    
-    @classmethod
-    def chunked(cls) -> List[Datapoint]:
-        if cls.hf_data is None:
-            cls.load_data()
-        return cls.hf_data
-    
-    @classmethod
-    def to_chroma(cls) -> AddEmbedding:
-        return to_chroma_schema(cls.chunked())
-
+    hf_dataset_name = "chromadb/pg_essay"
+    embedding_function = "OpenAIEmbeddingFunction"
+    embedding_function_instructions = ef_instruction_dict[embedding_function]
 ```
-
-Add it to the manifest at `chroma_datasets/__init__.py` to make it easy for people to retrieve (optional)
 
 ### Utility API Documentation
 
