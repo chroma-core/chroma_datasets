@@ -83,7 +83,7 @@ dataset.push_to_hub(
     split="data")
 ```
 
-Create a Dataset Class
+Create a Dataset Class and add it to `chroma_datasets/__init__.py`
 - Set the string name of the embedding function you used to embed the data, this will make it possible for users to use the embeddings. Please also customize the helpful error message so if users pass in no embedding function or the wrong one, they get help.
 ```python
 class PaulGrahamEssay(Dataset):
