@@ -73,7 +73,7 @@ Upload an existing collection to Hugging Face
 ```python
 import chromadb
 from chroma_datasets.utils import export_collection_to_hf_dataset
-client = chromadb.PersistantClient(path="./chroma_data")
+client = chromadb.PersistentClient(path="./chroma_data")
 dataset = export_collection_to_hf_dataset(
     client=client, 
     collection_name="paul_graham_essay", 
